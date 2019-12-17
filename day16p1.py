@@ -11,13 +11,11 @@ n = len(fft_input)
 idxs = np.arange(n)
 steps = 100
 
-patterns = []
-for j in range(n):
-    pattern = np.zeros(n, dtype=int)
-    pattern[np.logical_and(idxs % (4 * (j + 1)) >= j, idxs % (4 * (j + 1)) <= 2 * j)] = 1
-    pattern[np.logical_and(idxs % (4 * (j + 1)) >= 3 * j + 2, idxs % (4 * (j + 1)) <= 4 * j + 2)] = -1
-    patterns.append(pattern)
-patterns = np.array(patterns)
+patterns = np.zeros((n, n), dtype=int)
+col, row = np.meshgrid(idxs, idxs)
+
+patterns[np.logical_and(col % (4 * (row + 1)) >= row, col % (4 * (row + 1)) <= 2 * row)] = 1
+patterns[np.logical_and(col % (4 * (row + 1)) >= 3 * row + 2, col % (4 * (row + 1)) <= 4 * row + 2)] = -1
 
 for i in range(steps):
     fft_input = np.dot(patterns, fft_input)
