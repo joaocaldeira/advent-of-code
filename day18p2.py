@@ -6,6 +6,7 @@ def find_distances_to_keys(map_here, starting_pts):
     moves = [1, -1, length, -length]
     keys_found = {}
     step = 1
+
     while current_pos:
         next_pos = []
         for pos in current_pos:
@@ -15,7 +16,7 @@ def find_distances_to_keys(map_here, starting_pts):
                     if step < distances[new_pos]:
                         distances[new_pos] = step
                         next_pos.append((pos[0], new_pos))
-                elif map_here[new_pos].islower():
+                elif map_here[new_pos].islower() and map_here[new_pos] not in keys_found:
                     positions_after_keys = starting_pts.copy()
                     positions_after_keys[pos[0]] = new_pos
                     keys_found[map_here[new_pos]] = (step, positions_after_keys)
@@ -36,24 +37,6 @@ class Path:
 with open('input18.txt', 'r') as file:
     underground_map = file.read()
 
-# underground_map = '''#######
-# #a.#Cd#
-# ##...##
-# ##.@.##
-# ##...##
-# #cB#Ab#
-# #######
-# '''
-
-# underground_map = '''###############
-# #d.ABC.#.....a#
-# ######...######
-# ######.@.######
-# ######...######
-# #b.....#.....c#
-# ###############
-# '''
-
 length = underground_map.find('\n') + 1
 height = len(underground_map)//length
 
@@ -69,26 +52,33 @@ min_steps = float('inf')
 while current_maps:
     next_maps = {}
     sets_of_keys = {}
+
     for this_map in current_maps:
         key_distances = find_distances_to_keys(this_map.map_here, this_map.positions)
+
         if not key_distances:
             if min_steps > this_map.steps_so_far:
                 min_steps = this_map.steps_so_far
             continue
+
         for key in key_distances:
-            steps, positions = key_distances[key]
             key_pos = this_map.map_here.find(key)
             door_pos = this_map.map_here.find(key.upper())
             new_map = this_map.map_here[:key_pos] + '.' + this_map.map_here[key_pos+1:]
-            keys_found = this_map.keys_found + key
-            keys_found = ''.join(sorted(keys_found))
             if door_pos > -1:
                 new_map = new_map[:door_pos] + '.' + new_map[door_pos + 1:]
+
+            steps, positions = key_distances[key]
             steps_so_far = this_map.steps_so_far + steps
+
+            keys_found = this_map.keys_found + key
+            keys_found = ''.join(sorted(keys_found))
             state = (keys_found, positions[0], positions[1], positions[2], positions[3])
+
             if state not in sets_of_keys or sets_of_keys[state] > steps_so_far:
                 sets_of_keys[state] = steps_so_far
                 next_maps[state] = Path(new_map, steps_so_far, positions, keys_found)
+
     current_maps = list(next_maps.values())
 
 print(min_steps)
