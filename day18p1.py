@@ -1,3 +1,6 @@
+import bisect
+
+
 def find_distances_to_keys(map_here, starting_pt):
     distances = [float('inf') for _ in map_here]
     distances[starting_pt] = 0
@@ -64,8 +67,8 @@ while current_maps:
             steps, position = key_distances[key]
             steps_so_far = this_map.steps_so_far + steps
 
-            keys_found = this_map.keys_found + key
-            keys_found = ''.join(sorted(keys_found))
+            idx_new_key = bisect.bisect_left(this_map.keys_found, key)
+            keys_found = this_map.keys_found[:idx_new_key] + key + this_map.keys_found[idx_new_key:]
             state = (keys_found, position)
 
             if state not in sets_of_keys or sets_of_keys[state] > steps_so_far:
