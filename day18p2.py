@@ -73,7 +73,7 @@ while current_maps:
 
             keys_found = this_map.keys_found + key
             keys_found = ''.join(sorted(keys_found))
-            state = (keys_found, positions[0], positions[1], positions[2], positions[3])
+            state = (keys_found,) + tuple(positions)
 
             if state not in sets_of_keys or sets_of_keys[state] > steps_so_far:
                 sets_of_keys[state] = steps_so_far
