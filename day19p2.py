@@ -22,6 +22,8 @@ while not done:
         if on_beam and not found_left:
             found_left = True
             start_j = j
+            j += size - 1
+            continue
         elif not on_beam and found_left:
             found_right = True
             right_end.put(j-1)
