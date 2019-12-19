@@ -22,7 +22,7 @@ while not done:
         if on_beam and not found_left:
             found_left = True
             start_j = j
-        if not on_beam and found_left:
+        elif not on_beam and found_left:
             found_right = True
             right_end.put(j-1)
             if right_end.full():
@@ -30,7 +30,7 @@ while not done:
                 if top_right_end - start_j >= size - 1:
                     print(10000*(i-size+1)+start_j)
                     done = True
-        if not on_beam and not found_left and j - start_j > 10:
+        elif not on_beam and not found_left and j - start_j > 10:
             break
         j += 1
     i += 1
