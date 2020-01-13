@@ -37,11 +37,9 @@ for address in idx:
         station = address
         asteroids_from_station = visible_asteroids
 
-print(max_visible)
-print(station)
-
+# using the fact that 200 < number of visible asteroids
 ordinal = 200
 angles = list(asteroids_from_station.keys())
 angles.sort()
-print(angles[ordinal - 1])
-print(asteroids_from_station[angles[ordinal - 1]])
+relative_position = asteroids_from_station[angles[ordinal - 1]]
+print(100*(station[1] + relative_position[1]) + station[0] + relative_position[0])
